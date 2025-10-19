@@ -440,12 +440,14 @@
 
             copyLinkBtn.addEventListener('click', () => {
                 const senderName = senderNameInput.value.trim() || 'Aapke ek dost';
-                const messageParts = [
-                    "Diwali sirf diye jalane ka tyohaar nahi, balki doston ke dil milane ka din hai. 💫",
-                    `\n\nIssi pyaar aur dosti ke bandhan ko aur mazboot karne ke liye, ${senderName} ne yeh sandesh likha hai jo unke dil se nikla hai — sirf aapke liye. ❤️`,
-                    `\n\nAb der kis baat ki? Neeche diye gaye link par click kijiye aur dekhiye woh beautiful wish jo ${senderName} ne aapke liye likhi hai — ek aisi wish jo roshan karegi aapka din aur bhar degi dil me mithas jaise Diwali ke laddoo! 🍬🎆`,
-                    "\n\n✨ Click karke apni special Diwali wish dekhiye aur aap bhi apne doston ko aise hi wish bhejiye! 🎉\n\n"
-                ];
+               const messageParts = [
+    `🎇 आपको और आपके परिवार को दीपावली की हार्दिक शुभकामनाएँ! 🪔✨`,
+    `\n\nइस पावन पर्व पर आपके जीवन में खुशियों की बरसात हो, सफलता और समृद्धि के दीप सदा जलते रहें, और आपके घर-आँगन में प्रेम, शांति और उल्लास की रौशनी फैली रहे। 🌟`,
+    `\n\nदीपावली हमें यह सिखाती है कि अंधकार कितना भी गहरा क्यों न हो, एक छोटा सा दीप भी उम्मीद और खुशियों की नई किरण जगा सकता है।\nइसी तरह आपके जीवन में भी हर दिन नई ऊर्जा, नई प्रेरणा और नई खुशियों से भरा रहे। 💫`,
+    `\n\n${senderName} की तरफ से यह दिल से निकला हुआ संदेश आपके लिए है — हमेशा खुश रहें और इस दिवाली की रौशनी आपके जीवन को जगमगाए। ❤️`,
+    `\n\n✨ शुभ दीपावली! आपका जीवन हमेशा रोशनी, मिठास और आनंद से महकता रहे। 🎉\n\n`
+];
+
                 const beautifulMessage = messageParts.join('');
                 const linkToCopy = generatedLinkEl.textContent;
                 const fullTextToCopy = beautifulMessage + linkToCopy;
