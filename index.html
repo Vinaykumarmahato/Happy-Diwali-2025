@@ -1,1 +1,573 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Diwali Wish Sender</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Reset and Global Styles */
+        :root {
+            --bg-color: #1a052e;
+            --primary-color: #ff9900;
+            --secondary-color: #ff5722;
+            --accent-color: #fce700;
+            --text-color: #ffffff;
+            --card-bg: rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0d021f, #3c0d4a, #d15a28);
+            background-attachment: fixed;
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 1rem;
+        }
+
+        /* Sparkles Canvas Styling */
+        #sparkle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Main Container and Page Transitions */
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .page {
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.7s ease-in-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Typography */
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--secondary-color);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            color: var(--text-color);
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 153, 0, 0.4);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            opacity: 0.8;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Generated Link Section */
+        #generated-link-container {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+
+        #generated-link {
+            word-wrap: break-word;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px;
+            border-radius: 5px;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .link-actions button {
+            margin: 0.5rem;
+        }
+
+        /* Receiver Wish Card */
+        #receiver-card {
+            background: rgba(0,0,0,0.3);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary-color);
+            border-right: 5px solid var(--secondary-color);
+        }
+
+        #wish-message {
+            font-style: italic;
+            font-size: 1.2rem;
+            color: #f0f0f0;
+            white-space: pre-wrap;
+        }
+        
+        #wish-recipient {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 2rem;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Diya Animation */
+        .diya {
+            position: relative;
+            width: 100px;
+            height: 50px;
+            background-color: #ff9900;
+            border-radius: 0 0 50px 50px;
+            margin: 2rem auto;
+            transform: perspective(100px) rotateX(20deg);
+        }
+
+        .diya::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 20px;
+            background-color: #ff5722;
+            border-radius: 50%;
+        }
+
+        .flame {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 40px;
+            background-color: #fce700;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: 0 0 20px #fce700, 0 0 40px #ff9900, 0 0 60px #ff5722;
+            animation: flicker 1.5s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0%, 100% { transform: translateX(-50%) scaleY(1) scaleX(1); opacity: 1; }
+            50% { transform: translateX(-52%) scaleY(0.95) scaleX(1.05); opacity: 0.9; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.8rem; }
+            p { font-size: 1rem; }
+            .btn { padding: 12px 24px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="sparkle-canvas"></canvas>
+    
+    <main class="container">
+        <!-- PAGE 1: Landing Page -->
+        <div id="landing-page" class="page">
+            <h1>🎇 Happy Diwali 2025 🎇</h1>
+            <p>Share a personalized Diwali wish with your friends and family. Create a unique, sparkling message to light up their celebration.</p>
+            <div class="diya">
+                <div class="flame"></div>
+            </div>
+            <button id="create-wish-btn" class="btn">Create & Share a Wish</button>
+        </div>
+
+        <!-- PAGE 2: Wish Creator Form -->
+        <div id="creator-page" class="page">
+            <h2>Create Your Wish</h2>
+            <p>Fill in the details below to generate a shareable link.</p>
+            <form id="wish-form">
+                <div class="form-group">
+                    <label for="sender-name">Your Name</label>
+                    <input type="text" id="sender-name" class="form-control" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="receiver-name">Friend's Name (Optional)</label>
+                    <input type="text" id="receiver-name" class="form-control" placeholder="Enter your friend's name">
+                </div>
+                <div class="form-group">
+                    <label for="message">Your Message</label>
+                    <textarea id="message" class="form-control" required>Wishing you a very Happy Diwali! May your life be filled with light, happiness, and success.</textarea>
+                </div>
+                <button type="submit" class="btn">Generate Wish Link</button>
+            </form>
+            <div id="generated-link-container" style="display: none;">
+                <h3>Your Link is Ready!</h3>
+                <div id="generated-link"></div>
+                <div class="link-actions">
+                    <button id="copy-link-btn" class="btn">Copy Link</button>
+                    <button id="share-link-btn" class="btn">Share</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 3: Receiver Page -->
+        <div id="receiver-page" class="page">
+            <div id="receiver-card">
+                <h2 id="wish-from"></h2>
+                <p id="wish-message"></p>
+                <p id="wish-recipient"></p>
+            </div>
+            <p style="margin-top: 2rem;">Want to send your own wish?</p>
+            <button id="reply-btn" class="btn">Create Your Own Wish</button>
+        </div>
+        
+        <footer id="footer"></footer>
+    </main>
+
+    <script>
+        // --- SCRIPT START --- //
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- DOM Elements --- //
+            const pages = document.querySelectorAll('.page');
+            const landingPage = document.getElementById('landing-page');
+            const creatorPage = document.getElementById('creator-page');
+            const receiverPage = document.getElementById('receiver-page');
+            
+            const createWishBtn = document.getElementById('create-wish-btn');
+            const replyBtn = document.getElementById('reply-btn');
+            const wishForm = document.getElementById('wish-form');
+            
+            const senderNameInput = document.getElementById('sender-name');
+            const receiverNameInput = document.getElementById('receiver-name');
+            const messageInput = document.getElementById('message');
+            
+            const generatedLinkContainer = document.getElementById('generated-link-container');
+            const generatedLinkEl = document.getElementById('generated-link');
+            const copyLinkBtn = document.getElementById('copy-link-btn');
+            const shareLinkBtn = document.getElementById('share-link-btn');
+            
+            const wishFromEl = document.getElementById('wish-from');
+            const wishMessageEl = document.getElementById('wish-message');
+            const wishRecipientEl = document.getElementById('wish-recipient');
+            
+            const footer = document.getElementById('footer');
+
+            // --- Page Navigation --- //
+            function showPage(pageId) {
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                const activePage = document.getElementById(pageId);
+                if (activePage) {
+                    activePage.classList.add('active');
+                }
+            }
+
+            // --- Routing Logic --- //
+            function handleRouting() {
+                const params = new URLSearchParams(window.location.search);
+                if (params.has('wish')) {
+                    try {
+                        const encodedData = params.get('wish');
+                        const decodedString = atob(encodedData);
+                        const wishData = JSON.parse(decodedString);
+                        
+                        displayWish(wishData);
+                        showPage('receiver-page');
+                        startSparkles(); // Start sparkle animation
+                    } catch (error) {
+                        console.error("Invalid wish data:", error);
+                        showPage('landing-page'); // Fallback to landing if data is corrupt
+                    }
+                } else {
+                    showPage('landing-page');
+                }
+            }
+            
+            // --- Display Wish --- //
+            function displayWish(data) {
+                wishFromEl.textContent = `🎆 A Special Diwali Wish from ${data.sender} 🎆`;
+                wishMessageEl.textContent = data.message;
+                if (data.receiver) {
+                    wishRecipientEl.textContent = `Especially for ${data.receiver}`;
+                    wishRecipientEl.style.display = 'block';
+                } else {
+                    wishRecipientEl.style.display = 'none';
+                }
+            }
+
+            // --- Event Listeners --- //
+            createWishBtn.addEventListener('click', () => {
+                showPage('creator-page');
+            });
+            
+            replyBtn.addEventListener('click', () => {
+                // Clear the creator form and go to creator page
+                window.history.pushState({}, '', window.location.pathname);
+                wishForm.reset();
+                generatedLinkContainer.style.display = 'none';
+                showPage('creator-page');
+            });
+
+            wishForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const wishData = {
+                    sender: senderNameInput.value.trim(),
+                    receiver: receiverNameInput.value.trim(),
+                    message: messageInput.value.trim()
+                };
+                
+                // Encode data to Base64 to create a cleaner URL
+                const jsonString = JSON.stringify(wishData);
+                const encodedData = btoa(jsonString);
+                
+                const baseUrl = window.location.origin + window.location.pathname;
+                const shareableLink = `${baseUrl}?wish=${encodedData}`;
+                
+                generatedLinkEl.textContent = shareableLink;
+                generatedLinkContainer.style.display = 'block';
+
+                // Check for navigator.share support
+                if (!navigator.share) {
+                    shareLinkBtn.style.display = 'none';
+                }
+            });
+
+            copyLinkBtn.addEventListener('click', () => {
+                const senderName = senderNameInput.value.trim() || 'Aapke ek dost';
+                const messageParts = [
+                    "Diwali sirf diye jalane ka tyohaar nahi, balki doston ke dil milane ka din hai. 💫",
+                    `\n\nIssi pyaar aur dosti ke bandhan ko aur mazboot karne ke liye, ${senderName} ne yeh sandesh likha hai jo unke dil se nikla hai — sirf aapke liye. ❤️`,
+                    `\n\nAb der kis baat ki? Neeche diye gaye link par click kijiye aur dekhiye woh beautiful wish jo ${senderName} ne aapke liye likhi hai — ek aisi wish jo roshan karegi aapka din aur bhar degi dil me mithas jaise Diwali ke laddoo! 🍬🎆`,
+                    "\n\n✨ Click karke apni special Diwali wish dekhiye aur aap bhi apne doston ko aise hi wish bhejiye! 🎉\n\n"
+                ];
+                const beautifulMessage = messageParts.join('');
+                const linkToCopy = generatedLinkEl.textContent;
+                const fullTextToCopy = beautifulMessage + linkToCopy;
+                
+                // Use `document.execCommand('copy')` as a fallback for iframe environments
+                try {
+                    navigator.clipboard.writeText(fullTextToCopy).then(() => {
+                        copyLinkBtn.textContent = 'Copied!';
+                        setTimeout(() => { copyLinkBtn.textContent = 'Copy Link'; }, 2000);
+                    }).catch(err => {
+                        console.warn('Async clipboard access failed, trying fallback.', err);
+                        fallbackCopyTextToClipboard(fullTextToCopy);
+                    });
+                } catch (err) {
+                    console.warn('Clipboard API not available, trying fallback.', err);
+                    fallbackCopyTextToClipboard(fullTextToCopy);
+                }
+            });
+
+            function fallbackCopyTextToClipboard(text) {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed"; 
+                textArea.style.top = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    const successful = document.execCommand('copy');
+                    if (successful) {
+                        copyLinkBtn.textContent = 'Copied!';
+                        setTimeout(() => { copyLinkBtn.textContent = 'Copy Link'; }, 2000);
+                    } else {
+                        throw new Error('Fallback copy failed');
+                    }
+                } catch (err) {
+                    copyLinkBtn.textContent = 'Copy Failed';
+                    console.error('Fallback: Oops, unable to copy', err);
+                }
+                document.body.removeChild(textArea);
+            }
+
+            shareLinkBtn.addEventListener('click', () => {
+                if (navigator.share) {
+                    navigator.share({
+                        title: `A Diwali Wish from ${senderNameInput.value.trim()}`,
+                        text: 'You received a special Diwali wish! ✨',
+                        url: generatedLinkEl.textContent
+                    }).catch((error) => console.log('Error sharing', error));
+                }
+            });
+            
+            // --- Footer --- //
+            function updateFooter() {
+                const today = new Date();
+                const dateString = today.toLocaleDateString('en-US', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                });
+                footer.textContent = `📅 ${dateString} | Made with ❤️ for a Sparkling Diwali`;
+            }
+
+            // --- Sparkle Animation on Canvas --- //
+            const canvas = document.getElementById('sparkle-canvas');
+            const ctx = canvas.getContext('2d');
+            let sparkles = [];
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            function startSparkles() {
+                for (let i = 0; i < 50; i++) {
+                    sparkles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        size: Math.random() * 2 + 1,
+                        speedX: Math.random() * 2 - 1,
+                        speedY: Math.random() * 2 - 1,
+                        color: `hsl(${Math.random() * 50 + 10}, 100%, 75%)`, // Gold/orange/yellow
+                        life: Math.random() * 100 + 50
+                    });
+                }
+            }
+
+            function animateSparkles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < sparkles.length; i++) {
+                    const s = sparkles[i];
+                    s.x += s.speedX;
+                    s.y += s.speedY;
+                    s.life--;
+
+                    if (s.life < 0 || s.x < 0 || s.x > canvas.width || s.y < 0 || s.y > canvas.height) {
+                        sparkles.splice(i, 1);
+                        i--;
+                    } else {
+                        ctx.beginPath();
+                        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                        ctx.fillStyle = s.color;
+                        ctx.globalAlpha = s.life / 150;
+                        ctx.fill();
+                        ctx.globalAlpha = 1;
+                    }
+                }
+                requestAnimationFrame(animateSparkles);
+            }
+
+
+            // --- Initialization --- //
+            function init() {
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
+                handleRouting();
+                updateFooter();
+                animateSparkles(); // Start the background animation loop
+            }
+            
+            init();
+        });
+        // --- SCRIPT END --- //
+    </script>
+</body>
+</html>
+
